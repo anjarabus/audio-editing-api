@@ -1,0 +1,33 @@
+/* FileUpload.css */
+
+.timestamps-container {
+    max-height: 500px; /* Adjust this height as needed */
+    overflow-y: auto; /* Add vertical scrollbar if content exceeds max-height */
+    border: 1px solid #ccc; /* Optional: Add border for better visibility */
+    padding: 10px; /* Optional: Add padding for aesthetics */
+  }
+  
+  .timestamps-container ul {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0; /* Remove default padding */
+  }
+  
+  .timestamps-container li {
+    margin-bottom: 5px; /* Add space between items */
+  }
+
+  .file-upload-container {
+    margin-bottom: 50px; /* Space between the pairs of file input and button */
+  }
+  
+  .file-input {
+    margin-right: 10px; /* Space between file input and button */
+  }
+  
+  .upload-button {
+    padding: 6px 12px;
+  }
+
+  .download-button {
+    padding: 6px 12px;
+  }
