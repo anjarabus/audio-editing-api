@@ -4,6 +4,8 @@ from typing import List
 from fastapi.middleware.cors import CORSMiddleware
 import re
 import csv
+import zipfile
+import os
 import io
 import logging
 from pydub import AudioSegment 
@@ -24,6 +26,9 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+
+# In-memory storage for job-related files
+job_storage = {}
 
 @app.post("/upload/csv/")
 async def upload_csv(file: UploadFile = File(...)):
@@ -69,12 +74,11 @@ async def upload_csv(file: UploadFile = File(...)):
 
         logging.info(f"hrs mins secs ms: {int(hrs)} {int(mins)} {int(secs)} {int(ms)}")
         logging.info(f"end time: {(int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms)}")
-
-        # logging.info(f"Verify start times: {start_times}")
-        # logging.info(f"Verify end times: {end_times}")
     
     return {"extracted_timestamps": tss, "start_times": start_times, "end_times": end_times}
 
+# In-memory storage for file information
+file_info_storage = {}
 
 @app.post("/upload/audio/")
 async def upload_audio(
@@ -108,50 +112,81 @@ async def upload_audio(
         raise HTTPException(status_code=400, detail="Start times and end times length mismatch")
 
     audio_files = {}
+
+    from random import randrange
+    job_id = str(randrange(1000000)) #new
+    job_storage[job_id] = {} #new
     
+    spliced_audio_files = {}
+    edited_audio_files = {}
+
     for file in files:
         try:
             contents = await file.read()
             audio_files[file.filename] = contents
+            spliced_audio_files[file.filename] = []
+            edited_audio_files[file.filename] = []
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Error reading file {file.filename}: {str(e)}")
     
-    
-    spliced_audio_files = []
-    for filename, file_content in audio_files.items():
-        try:
-            audio = AudioSegment.from_file(io.BytesIO(file_content))
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=f"Error processing file {filename}: {str(e)}")
-        
-        for start_time, end_time in zip(start_times, end_times):
-            if isinstance(start_time, int) and isinstance(end_time, int):
-                start_ms = max(start_time, 0)
-                end_ms = max(end_time, 0)
-                if start_ms < end_ms:  
-                    segment = audio[start_ms:end_ms]
-                    spliced_audio_files.append(segment)
+        for filename, file_content in audio_files.items():
+            try:
+                audio = AudioSegment.from_file(io.BytesIO(file_content))
+            except Exception as e:
+                raise HTTPException(status_code=400, detail=f"Error processing file {filename}: {str(e)}")
+            for start_time, end_time in zip(start_times, end_times):
+                if isinstance(start_time, int) and isinstance(end_time, int):
+                    start_ms = max(start_time, 0)
+                    end_ms = max(end_time, 0)
+                    if start_ms < end_ms:  
+                        segment = audio[start_ms:end_ms]
+                        spliced_audio_files[filename].append(segment)
+                    else:
+                        raise HTTPException(status_code=400, detail="Invalid time range in timestamps")
                 else:
-                    raise HTTPException(status_code=400, detail="Invalid time range in timestamps")
-            else:
-                raise HTTPException(status_code=400, detail="Start times and end times must be integers")
+                    raise HTTPException(status_code=400, detail="Start times and end times must be integers")
+            
+
+        combined = AudioSegment.empty()
+        for segment in spliced_audio_files[file.filename]:
+            combined += segment
+
+        edited_audio_files[file.filename] = combined
+
+            
+        random_id= randrange(1000000)
+
+        name = filename.split('.')[0]
+                
+        file_path = f"edited_audios/spliced_output_{random_id}.wav"
+        combined.export(file_path, format="wav")
+            
+        #combined.export(f"edited_audios/spliced_output_{random_id}.wav", format="wav")
+
+        job_storage[job_id][file.filename] = file_path #new
+
+
+        #return {"detail": "Audio files processed and spliced successfully", "file_id": random_id,"file_name": name} 
+    return {"detail": "Audio files processed and spliced successfully", "job_id": job_id} #new
+
+
+@app.get("/download/{job_id}")
+async def download_files(job_id: str):
+    if job_id not in job_storage:
+        raise HTTPException(status_code=404, detail="Job ID not found")
     
-
-    combined = AudioSegment.empty()
-    for segment in spliced_audio_files:
-        combined += segment
-
-    from random import randrange
-    random_id= randrange(1000000)
+    files = job_storage[job_id]
     
-    combined.export(f"edited_audios/spliced_output_{random_id}.wav", format="wav")
-
-    return {"detail": "Audio files processed and spliced successfully", "file_id": random_id}
-
-@app.get("/download/{random_id}/{file_name}")
-async def read_root(random_id: str, file_name:str):
-    path = f"edited_audios/spliced_output_{random_id}.wav"
-    def iterfile():
-            with open(path,"rb") as f:
-                yield from f
-    return StreamingResponse(iterfile(),headers={'Content-Disposition': f'attachment; filename="{file_name}"'})
+    # Create a zip file in memory
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        for original_filename, file_path in files.items():
+            zip_file.write(file_path, original_filename)
+    
+    zip_buffer.seek(0)
+    
+    return StreamingResponse(
+        zip_buffer,
+        media_type='application/zip',
+        headers={'Content-Disposition': f'attachment; filename="processed_files_{job_id}.zip"'}
+    )
