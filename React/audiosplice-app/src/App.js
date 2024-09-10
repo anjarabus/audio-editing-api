@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import api from './api';
-import './FileUpload.css'; // Import CSS file for styling
+import './style.css'; // Import CSS file for styling
 
 const FileUpload = () => {
   console.log("FileUpload component rendered");
@@ -142,35 +142,61 @@ const FileUpload = () => {
 
   return (
     <div>
-      <h2>
-        Upload transcript
-      </h2>
-      <input type="file" accept=".csv" onChange={handleCsvFileChange} />
-      <button onClick={handleCsvUpload} disabled={csvLoading}>
-        {csvLoading ? 'Uploading...' : 'Upload'}
-      </button>
+      <div className="background-img">
+      </div>
+      
+    <header className="header">
+      <h1>
+        The <span className="big-text">P</span>hysics and <span className="big-text">A</span>stronomy <span className="big-text">M</span>entorship Talks <br>
+        </br>
+        <span className="fancy-text">Story-boarding Application</span>
+      </h1>
+    </header>
 
-      {timestamps.extracted_timestamps.length > 0 && (
-        <div className="timestamps-container">
-          <h3>Extracted Timestamps:</h3>
-          <ul>
-            {timestamps.extracted_timestamps.map((timestamp, index) => (
-              <li key={index}>{timestamp.join(', ')}</li>
-            ))}
-          </ul>
+      <div className="container">
+        <div className="text-content">
+          <h3>
+          First... upload your story-board ;)
+          </h3>
+          <p>
+            Upload a CSV file. You do not need to remove extra text.
+          </p>
+          <input type="file" accept=".csv" onChange={handleCsvFileChange} />
+          <button onClick={handleCsvUpload} className="upload-button">
+            {csvLoading ? 'Uploading...' : 'Upload'}
+          </button>
         </div>
-      )}
+        <div>
+          {timestamps.extracted_timestamps.length > 0 && (
+            <div className="timestamps-container">
+              <h4>Extracted Timestamps:</h4>
+              <p style={{ marginBottom: '20px' }}>
+                You can scroll through the timestamps here to make sure they look right!
+              </p>
+              <ul>
+                {timestamps.extracted_timestamps.map((timestamp, index) => (
+                  <li key={index}>{timestamp.join(', ')}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
 
-      <h2>Upload audio files</h2>
-
-      <div className="file-upload-container">
+      <div className="container">      
+          <div className="text-content">
+          <h3>Next... upload your audio files :)</h3>
+          <p>
+            You can upload as many files as you want. <br></br> They will all be edited according to the timestamps in your story-board.
+          </p>
+          <div className="file-upload-container">
         <input type="file" accept=".m4a" multiple onChange={handleAudioFileChange} className="file-input" />
-        <button onClick={handleAudioUpload} disabled={audioLoading} className="upload-button">
+        <button onClick={handleAudioUpload} className="upload-button">
           {audioLoading ? 'Uploading...' : 'Upload'}
         </button>
         {audioFileNames.length > 0 && (
           <div className="file-list">
-            <h3>Files to Upload:</h3>
+            <h4>Files to Upload:</h4>
             <ul>
               {audioFileNames.map((fileName, index) => (
                 <li key={index}>{fileName}</li>
@@ -179,13 +205,20 @@ const FileUpload = () => {
           </div>
         )}
       </div>
+        </div>
+      </div>
+      
 
-      <h2> Download audio files</h2>
-
-      <div>
-        <button onClick={handleAudioDownload} disabled={downloadLoading} className="download-button">
-        {downloadLoading ? 'Downloading...' : 'Download'}
-        </button>
+      <div className="container">      
+        <div className="text-content">
+          <h3> Finally... download your processed audio files!</h3>
+          <p>This might take a few minutes... </p>
+          <div>
+            <button onClick={handleAudioDownload} className="download-button">
+            {downloadLoading ? 'Downloading...' : 'Download'}
+            </button>
+          </div>
+        </div>
       </div>
 
     </div>
