@@ -1,7 +1,8 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse,FileResponse 
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import re
 import csv
 import zipfile
@@ -27,6 +28,8 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
+app.mount("/static", StaticFiles(directory="edited_audios"), name="static")
+
 # In-memory storage for job-related files
 job_storage = {}
 
@@ -47,7 +50,7 @@ async def upload_csv(file: UploadFile = File(...)):
             if ts:
                 tss.append(ts)
 
-    logging.info(f"Extracted timestamps: {tss}")  
+    #logging.info(f"Extracted timestamps: {tss}")  
 
     start_times=[]
     end_times=[]
@@ -61,8 +64,8 @@ async def upload_csv(file: UploadFile = File(...)):
         except: time='none'
         start_times.append(time)
 
-        logging.info(f"hrs mins secs ms: {int(hrs)} {int(mins)} {int(secs)} {int(ms)}")
-        logging.info(f"start time: {(int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms)}")
+        #logging.info(f"hrs mins secs ms: {int(hrs)} {int(mins)} {int(secs)} {int(ms)}")
+        #logging.info(f"start time: {(int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms)}")
 
         hrs = ts[0][17:19]
         mins = ts[0][20:22]
@@ -72,8 +75,8 @@ async def upload_csv(file: UploadFile = File(...)):
         except: time='none'
         end_times.append(time)
 
-        logging.info(f"hrs mins secs ms: {int(hrs)} {int(mins)} {int(secs)} {int(ms)}")
-        logging.info(f"end time: {(int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms)}")
+        #logging.info(f"hrs mins secs ms: {int(hrs)} {int(mins)} {int(secs)} {int(ms)}")
+        #logging.info(f"end time: {(int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms)}")
     
     return {"extracted_timestamps": tss, "start_times": start_times, "end_times": end_times}
 
@@ -88,7 +91,7 @@ async def upload_audio(
     if not files:
         raise HTTPException(status_code=400, detail="No files uploaded")
     
-    logging.info(f"Received timestamps: {timestamps}")
+    #logging.info(f"Received timestamps: {timestamps}")
     
     try:
         import json
@@ -114,8 +117,8 @@ async def upload_audio(
     audio_files = {}
 
     from random import randrange
-    job_id = str(randrange(1000000)) #new
-    job_storage[job_id] = {} #new
+    job_id = str(randrange(1000000))
+    job_storage[job_id] = {} 
     
     spliced_audio_files = {}
     edited_audio_files = {}
@@ -167,11 +170,32 @@ async def upload_audio(
 
 
         #return {"detail": "Audio files processed and spliced successfully", "file_id": random_id,"file_name": name} 
-    return {"detail": "Audio files processed and spliced successfully", "job_id": job_id} #new
+    return { "job_id": job_id} #new
+
+# new
+@app.get("/playaudio/{job_id}")
+async def play_audio(job_id: str):
+    print(f"Job storage contents: {job_storage}") # job storage is empty {} :(
+    print(f"Received job_id: {job_id}")  # Log job_id
+    if job_id not in job_storage:
+        raise HTTPException(status_code=404, detail="Job ID not found")
+    
+    files_dict = job_storage[job_id]
+    #files = list(files_dict.values())
+    # print(f"checking files... {files}")
+    # return files
+
+    base_url = "/static/"  # Ensure this matches your FastAPI static files mount path
+    #files = [base_url + filename for filename in files_dict.values()]
+    files = [base_url + filename.split('edited_audios/')[1] for filename in files_dict.values()]
+    print(f"checking files... {files}")
+    return files
+    #return FileResponse(files[0])
 
 
 @app.get("/download/{job_id}")
 async def download_files(job_id: str):
+    print(f"Job storage contents: {job_storage}") 
     if job_id not in job_storage:
         raise HTTPException(status_code=404, detail="Job ID not found")
     

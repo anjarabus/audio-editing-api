@@ -1,6 +1,5 @@
 /* FileUpload.css */
 
-
 /* Set the background color for the entire page */
 body {
   /* background-color: #0c0c93; */
@@ -11,6 +10,44 @@ body {
   padding: 0;
 }
 
+.root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px;
+}
+
+.inputs-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1400px;
+}
+
+.outputs-row {
+  display: flex;
+  width: 100%;
+  max-width: 1400px;
+  flex-direction: column;
+}
+
+.inputs-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.timestamps-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.download-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* Style for the background image container */
 .background-img {
   position: absolute; /* Positioning to layer behind other elements */
@@ -18,7 +55,7 @@ body {
   left: 0;
   width: 100%; /* Full width */
   height: 250px; /* Full viewport height */
-  background-image: url('./images/PAM_Talks_Logo_Square_.png'); /* Path to the background image */
+  background-image: url("./images/PAM_Talks_Logo_Square_.png"); /* Path to the background image */
   background-size: auto; /* Cover the entire element */
   background-repeat: no-repeat; /* Do not repeat the image */
   background-position: center top; /* Center the image */
@@ -34,19 +71,13 @@ body {
   padding: 20px; /* Spacing around the text */
 }
 
-div {
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-
 .big-text {
   font-size: 100px;
   font-weight: bold;
 }
 
 .fancy-text {
-  font-family: 'Dancing Script', cursive;
+  font-family: "Dancing Script", cursive;
 }
 
 /* Spacing for header elements */
@@ -67,50 +98,54 @@ h4 {
   margin-bottom: 10px; /* Adjust as needed */
 }
 
+.text-content {
+  display: inline;
+  text-align: left; /* Align text to the left */
+  margin-bottom: 50px;
+}
 
-  .container {
-    display: flex; /* Use Flexbox to layout child elements side by side */
-    align-items: flex-start; /* Align items to the top */
-    justify-content: space-between; /* Distribute space between items */
-    margin-top: 10px; /* Adjust as needed */
-  }
-  
-  .text-content {
-    display: inline;
-    text-align: left; /* Align text to the left */
-    margin-bottom: 50px;
-  }
-  
-  .timestamps-container {
-    max-height: 200px; /* Adjust this height as needed */
-    overflow-y: auto; /* Add vertical scrollbar if content exceeds max-height */
-    border: 1px solid #ccc; /* Optional: Add border for better visibility */
-    padding: 50px; /* Optional: Add padding for aesthetics */
-    text-align: center;
-    margin-left: auto; /* Push the container to the right */
-  }
-  
-  .timestamps-container ul {
-    list-style-type: none; /* Remove default list styling */
-    padding: 0; /* Remove default padding */
-  }
-  
-  .timestamps-container li {
-    margin-bottom: 5px; /* Add space between items */
-  }
+.timestamps-container {
+  max-height: 500px; /* Adjust this height as needed */
+  overflow-y: auto; /* Add vertical scrollbar if content exceeds max-height */
+  border: 1px solid #ccc; /* Optional: Add border for better visibility */
+  padding: 50px; /* Optional: Add padding for aesthetics */
+  text-align: center;
+  margin-left: 25px;
+}
 
-  .file-upload-container {
-    margin-bottom: 5px; /* Space between the pairs of file input and button */
-  }
-  
-  .file-input {
-    margin-right: 10px; /* Space between file input and button */
-  }
-  
-  .upload-button {
-    padding: 6px 12px;
-  }
+.timestamps-container ul {
+  list-style-type: none; /* Remove default list styling */
+  padding: 0; /* Remove default padding */
+}
 
-  .download-button {
-    padding: 6px 12px;
-  }
+.timestamps-container li {
+  margin-bottom: 5px; /* Add space between items */
+}
+
+.file-upload-container {
+  margin-bottom: 5px; /* Space between the pairs of file input and button */
+}
+
+.file-input {
+  margin-right: 10px; /* Space between file input and button */
+}
+
+.general-button {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.file-upload-button {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
