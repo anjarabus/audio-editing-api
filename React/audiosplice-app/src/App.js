@@ -70,6 +70,14 @@ const SpliceAudio = () => {
         end_times: result.data.end_times || [],
         extracted_timestamps: result.data.extracted_timestamps || [],
       });
+
+      // const time_differences = result.data.end_times.map(
+      //   (value, index) => value - result.data.start_times[index]
+      // );
+
+      // console.log("end times:", result.data.end_times);
+      // console.log("start times:", result.data.start_times);
+      // console.log("end times - start times:", time_differences);
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
@@ -85,10 +93,10 @@ const SpliceAudio = () => {
     console.log("handleAudioUpload function called");
     if (audioFiles.length === 0) return;
 
-    console.log(
-      "Timestamps state before sending:",
-      timestamps.extracted_timestamps
-    );
+    // console.log(
+    //   "Timestamps state before sending:",
+    //   timestamps.extracted_timestamps
+    // );
     const formData = new FormData();
     formData.append(
       "timestamps",
@@ -113,8 +121,8 @@ const SpliceAudio = () => {
       setJobId(result.data.job_id);
 
       // alert('Audio files uploaded and processed successfully!');
-      console.log("Processed job  with id:", result.data.job_id);
-      console.log("Number of files:", audioFiles.length);
+      //console.log("Processed job  with id:", result.data.job_id);
+      //console.log("Number of files:", audioFiles.length);
     } catch (error) {
       console.error("Error uploading audio files:", error);
     } finally {
@@ -135,12 +143,12 @@ const SpliceAudio = () => {
             throw new Error("Network response was not ok");
           }
           const files = await response.json();
-          console.log("Fetched audio files:", files);
+          //console.log("Fetched audio files:", files);
           const baseUrl = "http://localhost:8000";
           const absoluteUrls = files.map((file) => new URL(file, baseUrl).href);
           setProcessedAudioFiles(absoluteUrls);
 
-          console.log("URL:", absoluteUrls);
+          //console.log("URL:", absoluteUrls);
         } catch (error) {
           console.error("Failed to fetch audio files:", error);
         }
@@ -204,22 +212,49 @@ const SpliceAudio = () => {
     );
   };
 
-  //new:
-  const handleTimestampClick = (timestamp) => {
-    console.log(timestamp[0]);
+  const time_differences = timestamps.end_times.map(
+    (value, index) => value - timestamps.start_times[index]
+  );
 
-    if (typeof timestamp[0] == "string") {
-      const [startTime, endTime] = timestamp[0].split(" --> ");
-      const [time, milliseconds] = startTime.split(",");
-      const [hours, minutes, seconds] = time.split(":");
-      const clickedTime =
-        (hours * 3600 + minutes * 60 + seconds) / 1000 + milliseconds;
+  // console.log("End times:", timestamps.end_times);
+  // console.log("Start times:", timestamps.start_times);
+  // console.log("End times - Start times:", time_differences);
 
+  const cumulativeTime = [];
+  let sum = 0;
+  time_differences.forEach((value) => {
+    sum += value;
+    cumulativeTime.push(sum);
+  });
+
+  const handleTimestampClick = (index) => {
+    if (index + 1) {
+      console.log("index:", index);
+      const clickedTime = cumulativeTime.map(
+        (value) => (value - cumulativeTime[0]) / 1000
+      )[index];
       setUniversalTime(clickedTime);
-      console.log("clicked timestamp start time:", clickedTime);
+      console.log(
+        "clicked timestamp start time:",
+        cumulativeTime.map((value) => (value - cumulativeTime[0]) / 1000)[index]
+      );
     } else {
-      console.log("timestamp is not a string");
+      console.log("index not valid");
     }
+    // const timestamp = timestamps.extracted_timestamps[index];
+    // console.log(timestamp[0]);
+
+    // if (typeof timestamp[0] == "string") {
+    //   const [startTime, endTime] = timestamp[0].split(" --> ");
+    //   const [time, milliseconds] = startTime.split(",");
+    //   const [hours, minutes, seconds] = time.split(":");
+    //   const clickedTime =
+    //     (hours * 3600 + minutes * 60 + seconds) / 1000 + milliseconds;
+    //   setUniversalTime(clickedTime);
+    //   console.log("clicked timestamp start time:", clickedTime);
+    // } else {
+    //   console.log("timestamp is not a string");
+    // }
   };
 
   ////////////////////// DOWNLOAD AUDIO /////////////////////////////
@@ -340,10 +375,7 @@ const SpliceAudio = () => {
                 <ul>
                   {timestamps.extracted_timestamps.map((timestamp, index) => (
                     <li key={index}>
-                      <a //new...
-                        href="#!" //new
-                        onClick={() => handleTimestampClick(timestamp)} //new
-                      >
+                      <a href="#!" onClick={() => handleTimestampClick(index)}>
                         {timestamp.join(", ")}
                       </a>
                     </li>
