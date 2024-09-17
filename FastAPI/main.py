@@ -161,8 +161,8 @@ async def upload_audio(
 
         name = filename.split('.')[0]
                 
-        file_path = f"edited_audios/spliced_output_{random_id}.wav"
-        combined.export(file_path, format="wav")
+        file_path = f"edited_audios/spliced_output_{random_id}.mp3" #.wav
+        combined.export(file_path, format="mp3") #wav
             
         #combined.export(f"edited_audios/spliced_output_{random_id}.wav", format="wav")
 
@@ -205,7 +205,8 @@ async def download_files(job_id: str):
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
         for original_filename, file_path in files.items():
-            zip_file.write(file_path, original_filename)
+            zip_file.write(file_path, original_filename.split('.')[0] + '_edited.' + original_filename.split('.')[1]) # change file name to download here? 
+            print(f"downloaded filename {original_filename.split('.')[0] + '_edited.' + original_filename.split('.')[1]}")
     
     zip_buffer.seek(0)
     

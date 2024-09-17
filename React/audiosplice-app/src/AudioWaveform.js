@@ -65,14 +65,27 @@ const AudioWaveform = ({
         const seekTime = audioElementRef.current.duration * x;
         console.log(seekTime);
         audioElementRef.current.currentTime = seekTime;
+        console.log("time", wavesurferRef.current.currentTime);
+        // wavesurferRef.current.currentTime = seekTime; //new
+        // console.log("time", wavesurferRef.current.currentTime);
+        //console.log("previous universal time:", previousUniversalTime);
         setUniversalTime(seekTime);
+        //console.log("current universal time:", universalTime);
       }
     });
 
     return () => {
-      if (wavesurferRef.current) {
-        wavesurferRef.current.destroy();
-        wavesurferRef.current = null;
+      // if (wavesurferRef.current) {
+      //   wavesurferRef.current.destroy();
+      //   wavesurferRef.current = null;
+      // }
+      try {
+        if (wavesurferRef.current) {
+          console.log("Attempting to destroy Wavesurfer instance");
+          wavesurferRef.current.destroy();
+        }
+      } catch (error) {
+        console.error("Error destroying Wavesurfer instance:", error);
       }
     };
   }, [fileUrl, index]);
@@ -112,14 +125,20 @@ const AudioWaveform = ({
           wavesurferRef.current.seekTo(
             universalTime / audioElementRef.current.duration
           );
+          // console.log(
+          //   "seek to (percentage of audio file length):",
+          //   universalTime / audioElementRef.current.duration
+          // );
           audioElementRef.current.currentTime = universalTime;
         }
         handlePlay();
+        //setUniversalTime(audioElementRef.current.currentTime); // not necessary?? with this statement, the above console log prints twice (and the second time, it prints 0 but only for the long transcript)
       } else {
         handlePause();
-        setUniversalTime(audioElementRef.current.currentTime);
+        //setUniversalTime(audioElementRef.current.currentTime); //this I think sets the time for both to the 2nd audio rec time (last loaded)
       }
     }
+    console.log("current time:", audioElementRef.current.currentTime);
   }, [
     wavesurferRef.current,
     audioElementRef.current,

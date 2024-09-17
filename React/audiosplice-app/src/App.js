@@ -20,10 +20,9 @@ const SpliceAudio = () => {
   const [audioFileNames, setAudioFileNames] = useState([]);
 
   const [processedAudioFiles, setProcessedAudioFiles] = useState([]); //new
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isAllPlaying, setIsAllPlaying] = useState(false);
 
-  const waveformRef = useRef([]);
+  //const waveformRef = useRef([]);
 
   const [universalTime, setUniversalTime] = useState(0);
 
@@ -112,6 +111,7 @@ const SpliceAudio = () => {
       );
 
       setJobId(result.data.job_id);
+
       // alert('Audio files uploaded and processed successfully!');
       console.log("Processed job  with id:", result.data.job_id);
       console.log("Number of files:", audioFiles.length);
@@ -126,22 +126,24 @@ const SpliceAudio = () => {
 
   useEffect(() => {
     const fetchProcessedAudioFiles = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8000/playaudio/${jobId}`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const files = await response.json();
-        console.log("Fetched audio files:", files);
-        const baseUrl = "http://localhost:8000";
-        const absoluteUrls = files.map((file) => new URL(file, baseUrl).href);
-        setProcessedAudioFiles(absoluteUrls);
+      if (jobId) {
+        try {
+          const response = await fetch(
+            `http://localhost:8000/playaudio/${jobId}`
+          );
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const files = await response.json();
+          console.log("Fetched audio files:", files);
+          const baseUrl = "http://localhost:8000";
+          const absoluteUrls = files.map((file) => new URL(file, baseUrl).href);
+          setProcessedAudioFiles(absoluteUrls);
 
-        console.log("URL:", absoluteUrls);
-      } catch (error) {
-        console.error("Failed to fetch audio files:", error);
+          console.log("URL:", absoluteUrls);
+        } catch (error) {
+          console.error("Failed to fetch audio files:", error);
+        }
       }
     };
 
@@ -200,6 +202,24 @@ const SpliceAudio = () => {
         )}
       </div>
     );
+  };
+
+  //new:
+  const handleTimestampClick = (timestamp) => {
+    console.log(timestamp[0]);
+
+    if (typeof timestamp[0] == "string") {
+      const [startTime, endTime] = timestamp[0].split(" --> ");
+      const [time, milliseconds] = startTime.split(",");
+      const [hours, minutes, seconds] = time.split(":");
+      const clickedTime =
+        (hours * 3600 + minutes * 60 + seconds) / 1000 + milliseconds;
+
+      setUniversalTime(clickedTime);
+      console.log("clicked timestamp start time:", clickedTime);
+    } else {
+      console.log("timestamp is not a string");
+    }
   };
 
   ////////////////////// DOWNLOAD AUDIO /////////////////////////////
@@ -319,7 +339,14 @@ const SpliceAudio = () => {
                 </p>
                 <ul>
                   {timestamps.extracted_timestamps.map((timestamp, index) => (
-                    <li key={index}>{timestamp.join(", ")}</li>
+                    <li key={index}>
+                      <a //new...
+                        href="#!" //new
+                        onClick={() => handleTimestampClick(timestamp)} //new
+                      >
+                        {timestamp.join(", ")}
+                      </a>
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -340,7 +367,7 @@ const SpliceAudio = () => {
                 />
               ))
             ) : (
-              <p>loading files...</p>
+              <p></p>
             )}
             <div
               style={{
