@@ -1,9 +1,5 @@
-/* FileUpload.css */
-
-/* Set the background color for the entire page */
+/* style.css */
 body {
-  /* background-color: #0c0c93; */
-  /* background-color: #050561; */
   background-color: black;
   color: white;
   margin: 0;
@@ -23,6 +19,7 @@ body {
   justify-content: space-between;
   width: 100%;
   max-width: 1400px;
+  margin-bottom: 50px;
 }
 
 .outputs-row {
@@ -30,6 +27,7 @@ body {
   width: 100%;
   max-width: 1400px;
   flex-direction: column;
+  margin-bottom: 20px;
 }
 
 .inputs-column {
@@ -48,27 +46,24 @@ body {
   align-items: center;
 }
 
-/* Style for the background image container */
 .background-img {
-  position: absolute; /* Positioning to layer behind other elements */
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100%; /* Full width */
-  height: 250px; /* Full viewport height */
-  background-image: url("./images/PAM_Talks_Logo_Square_.png"); /* Path to the background image */
-  background-size: auto; /* Cover the entire element */
-  background-repeat: no-repeat; /* Do not repeat the image */
-  background-position: center top; /* Center the image */
-  z-index: -1; /* Place it behind other elements */
+  width: 100%;
+  height: 250px;
+  background-image: url("./images/PAM_Talks_Logo_Square_.png");
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center top;
+  z-index: -1;
 }
 
-/* Style for the header */
 .header {
-  position: relative; /* Ensure the header is positioned on top of the background */
-  z-index: 1; /* Higher z-index to appear above the background image */
-  /* background: rgba(0, 0, 0, 0.5); Optional: semi-transparent background for readability */
-  color: white; /* Text color */
-  padding: 20px; /* Spacing around the text */
+  position: relative;
+  z-index: 1;
+  color: white;
+  padding: 20px;
 }
 
 .big-text {
@@ -80,54 +75,53 @@ body {
   font-family: "Dancing Script", cursive;
 }
 
-/* Spacing for header elements */
 h1 {
-  margin-bottom: 30px; /* Adjust as needed */
+  margin-bottom: 30px;
   color: white;
   text-align: center;
   font-size: 50px;
 }
 
 h3 {
-  margin-top: 20px; /* Adjust as needed */
-  margin-bottom: 20px; /* Adjust as needed */
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 h4 {
-  margin-top: 20px; /* Adjust as needed */
-  margin-bottom: 10px; /* Adjust as needed */
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .text-content {
   display: inline;
-  text-align: left; /* Align text to the left */
+  text-align: left;
   margin-bottom: 50px;
 }
 
 .timestamps-container {
-  max-height: 500px; /* Adjust this height as needed */
-  overflow-y: auto; /* Add vertical scrollbar if content exceeds max-height */
-  border: 1px solid #ccc; /* Optional: Add border for better visibility */
-  padding: 50px; /* Optional: Add padding for aesthetics */
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 50px;
   text-align: center;
   margin-left: 25px;
 }
 
 .timestamps-container ul {
-  list-style-type: none; /* Remove default list styling */
-  padding: 0; /* Remove default padding */
+  list-style-type: none;
+  padding: 0;
 }
 
 .timestamps-container li {
-  margin-bottom: 5px; /* Add space between items */
+  margin-bottom: 5px;
 }
 
 .file-upload-container {
-  margin-bottom: 5px; /* Space between the pairs of file input and button */
+  margin-bottom: 5px;
 }
 
 .file-input {
-  margin-right: 10px; /* Space between file input and button */
+  margin-right: 10px;
 }
 
 .general-button {
@@ -136,6 +130,7 @@ h4 {
   background-color: black;
   color: white;
   border: 1px solid white;
+  margin: 15px 15px;
 }
 
 input[type="file"] {
@@ -148,4 +143,5 @@ input[type="file"] {
   background-color: black;
   color: white;
   border: 1px solid white;
+  margin: 15px 15px;
 }

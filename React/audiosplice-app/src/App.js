@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import api from "./api";
-import "./style.css"; // Import CSS file for styling
-import AudioWaveform from "./AudioWaveform"; // Import the AudioWaveform component
+import "./style.css";
+import AudioWaveform from "./AudioWaveform";
 import { FaPlay, FaPause } from "react-icons/fa";
 
 const SpliceAudio = () => {
@@ -10,7 +10,7 @@ const SpliceAudio = () => {
   const [timestamps, setTimestamps] = useState({
     start_times: [],
     end_times: [],
-    extracted_timestamps: [], // Ensure extracted_timestamps is included
+    extracted_timestamps: [],
   });
   const [csvLoading, setCsvLoading] = useState(false); // Separate loading state for CSV upload
   const [audioLoading, setAudioLoading] = useState(false); // Separate loading state for audio upload
@@ -215,10 +215,6 @@ const SpliceAudio = () => {
   const time_differences = timestamps.end_times.map(
     (value, index) => value - timestamps.start_times[index]
   );
-
-  // console.log("End times:", timestamps.end_times);
-  // console.log("Start times:", timestamps.start_times);
-  // console.log("End times - Start times:", time_differences);
 
   const cumulativeTime = [];
   let sum = 0;

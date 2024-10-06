@@ -164,9 +164,16 @@ const AudioWaveform = ({
 };
 
 const PlayPauseButton = ({ isPlaying, togglePlay }) => {
+  const [hovered, setHovered] = useState(false);
   return (
     <div
       onClick={togglePlay}
+      onMouseEnter={() => {
+        setHovered(true);
+      }}
+      onMouseLeave={() => {
+        setHovered(false);
+      }}
       style={{
         width: 30,
         height: 30,
@@ -180,6 +187,7 @@ const PlayPauseButton = ({ isPlaying, togglePlay }) => {
           style={{
             height: 30,
             width: 30,
+            color: hovered ? "grey" : "white",
           }}
         />
       ) : (
@@ -187,6 +195,7 @@ const PlayPauseButton = ({ isPlaying, togglePlay }) => {
           style={{
             height: 30,
             width: 30,
+            color: hovered ? "grey" : "white",
           }}
         />
       )}
