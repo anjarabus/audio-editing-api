@@ -200,7 +200,7 @@ def function(file_name: str):
     response.headers["Content-Type"] = "audio/mpeg"
     response.headers["Content-Disposition"] = 'inline;filename="' + file_name + '"' 
     response.headers["Content-Length"] = str(os.stat(file_path).st_size)
-    response.headers["Accept-Ranges"] = "bytes"
+    response.headers["Accept-Ranges"] = "bytes" #important!
     return response
 
 
