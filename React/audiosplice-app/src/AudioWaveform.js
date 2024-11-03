@@ -53,6 +53,7 @@ const AudioWaveform = ({
       progressColor: "purple",
       height: 100,
       barWidth: 2,
+      backend: "MediaElement",
     });
 
     wavesurferRef.current = wavesurfer;
@@ -65,7 +66,7 @@ const AudioWaveform = ({
         const seekTime = audioElementRef.current.duration * x;
         console.log(seekTime);
         audioElementRef.current.currentTime = seekTime;
-        console.log("time", wavesurferRef.current.currentTime);
+        console.log("time", seekTime);
         // wavesurferRef.current.currentTime = seekTime; //new
         // console.log("time", wavesurferRef.current.currentTime);
         //console.log("previous universal time:", previousUniversalTime);
@@ -99,11 +100,15 @@ const AudioWaveform = ({
     if (wavesurferRef.current) {
       const audioElement = document.createElement("audio");
       audioElement.src = fileUrl;
+      audioElement.preload = "metadata";
       document.body.appendChild(audioElement);
       audioElementRef.current = audioElement;
 
       audioElement.addEventListener("canplay", handleCanPlay);
       audioElement.addEventListener("timeupdate", handleTimeUpdate);
+      // audioElement.onloadedmetadata = function () {
+      //   audioElement.currentTime = universalTime;
+      // };
 
       return () => {
         if (audioElementRef.current) {
@@ -122,6 +127,7 @@ const AudioWaveform = ({
     if (wavesurferRef.current) {
       if (isAllPlaying) {
         if (audioElementRef.current) {
+          console.log("Duration:", audioElementRef.current.duration);
           wavesurferRef.current.seekTo(
             universalTime / audioElementRef.current.duration
           );

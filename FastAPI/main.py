@@ -28,7 +28,7 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-app.mount("/static", StaticFiles(directory="edited_audios"), name="static")
+
 
 # In-memory storage for job-related files
 job_storage = {}
@@ -191,6 +191,17 @@ async def play_audio(job_id: str):
     print(f"checking files... {files}")
     return files
     #return FileResponse(files[0])
+
+# app.mount("/static", StaticFiles(directory="edited_audios"), name="static")
+@app.get("/static/{file_name:path}")
+def function(file_name: str):
+    file_path = "edited_audios/"+file_name 
+    response = FileResponse(file_path, media_type="audio/mpeg")
+    response.headers["Content-Type"] = "audio/mpeg"
+    response.headers["Content-Disposition"] = 'inline;filename="' + file_name + '"' 
+    response.headers["Content-Length"] = str(os.stat(file_path).st_size)
+    response.headers["Accept-Ranges"] = "bytes"
+    return response
 
 
 @app.get("/download/{job_id}")

@@ -336,7 +336,7 @@ const SpliceAudio = () => {
                 <label className="file-upload-button">
                   <input
                     type="file"
-                    accept=".m4a"
+                    accept=".m4a .mp3"
                     multiple
                     onChange={handleAudioFileChange}
                     className="file-input"
