@@ -3,7 +3,7 @@ import api from "./api";
 import "./style.css";
 import AudioWaveform from "./AudioWaveform";
 import { FaPlay, FaPause } from "react-icons/fa";
-import axios from "axios";
+// import axios from "axios";
 
 const apiUrl = "https://api.pamtalksaudiosplicing.com";
 
@@ -58,7 +58,7 @@ const SpliceAudio = () => {
     formData.append("file", csvFile);
 
     try {
-      const result = await axios.post(
+      const result = await api.post(
         // "http://localhost:8000/upload/csv/",
         `${apiUrl}/upload/csv`,
         formData,
