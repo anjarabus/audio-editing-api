@@ -30,6 +30,7 @@ services:
       - internal
     volumes:
       - ./React/audiosplice-app/:/home/React/
+      - ./ssl:/etc/ssl-nginx/
     depends_on:
       - fastapi
 networks:
