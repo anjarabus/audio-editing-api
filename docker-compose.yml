@@ -11,7 +11,8 @@ services:
     volumes:
       - ./FastAPI/:/home/FastAPI/
       - ./requirements.txt:/home/requirements.txt
-    entrypoint: ["bash", "-c", "cd /home/FastAPI && uvicorn main:app --reload"]
+    entrypoint:
+      ["bash", "-c", "cd /home/FastAPI && uvicorn main:app --workers 2"]
     extra_hosts:
       - "host.docker.internal:host-gateway"
   nginx:
