@@ -35,7 +35,7 @@ app.add_middleware(
 # In-memory storage for job-related files
 job_storage = {}
 
-@app.post("/upload/csv/")
+@app.post("/upload/csv")
 async def upload_csv(file: UploadFile = File(...)):
 
     tss = []
@@ -85,7 +85,7 @@ async def upload_csv(file: UploadFile = File(...)):
 # In-memory storage for file information
 file_info_storage = {}
 
-@app.post("/upload/audio/")
+@app.post("/upload/audio")
 async def upload_audio(
     files: List[UploadFile] = File(...),
     timestamps: str = Form(...),  # Accept timestamps as a JSON string
