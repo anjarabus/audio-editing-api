@@ -1,3 +1,6 @@
-FastAPI/edited_audios/
+FastAPI/edited_audios/*
+!FastAPI/edited_audios/.gitkeep
+ssl/*
+!ssl/.gitkeep
 React/audiosplice-app/node_modules/
 .DS_Store
