@@ -20,5 +20,5 @@ yarn-debug.log*
 yarn-error.log*
 
 
-ssl/*
-!ssl/.gitkeep
+/ssl/*
+!/ssl/.gitkeep
