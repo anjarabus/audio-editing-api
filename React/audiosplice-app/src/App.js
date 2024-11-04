@@ -4,7 +4,7 @@ import "./style.css";
 import AudioWaveform from "./AudioWaveform";
 import { FaPlay, FaPause } from "react-icons/fa";
 
-const apiUrl = "http://api.pamtalksaudiosplicing.com";
+const apiUrl = "https://api.pamtalksaudiosplicing.com";
 
 const SpliceAudio = () => {
   const [csvFile, setCsvFile] = useState(null);
