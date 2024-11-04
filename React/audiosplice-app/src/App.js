@@ -4,6 +4,8 @@ import "./style.css";
 import AudioWaveform from "./AudioWaveform";
 import { FaPlay, FaPause } from "react-icons/fa";
 
+const apiUrl = "http://api.pamtalksaudiosplicing.com";
+
 const SpliceAudio = () => {
   const [csvFile, setCsvFile] = useState(null);
   const [audioFiles, setAudioFiles] = useState([]);
@@ -56,7 +58,8 @@ const SpliceAudio = () => {
 
     try {
       const result = await api.post(
-        "http://localhost:8000/upload/csv/",
+        // "http://localhost:8000/upload/csv/",
+        `${apiUrl}/upload/csv`,
         formData,
         {
           headers: {
@@ -109,7 +112,8 @@ const SpliceAudio = () => {
 
     try {
       const result = await api.post(
-        "http://localhost:8000/upload/audio/",
+        // "http://localhost:8000/upload/audio/",
+        `${apiUrl}/upload/audio`,
         formData,
         {
           headers: {
@@ -137,14 +141,16 @@ const SpliceAudio = () => {
       if (jobId) {
         try {
           const response = await fetch(
-            `http://localhost:8000/playaudio/${jobId}`
+            // `http://localhost:8000/playaudio/${jobId}`
+            `${apiUrl}/playaudio/${jobId}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
           const files = await response.json();
           //console.log("Fetched audio files:", files);
-          const baseUrl = "http://localhost:8000";
+          // const baseUrl = "http://localhost:8000";
+          const baseUrl = apiUrl;
           const absoluteUrls = files.map((file) => new URL(file, baseUrl).href);
           setProcessedAudioFiles(absoluteUrls);
 
@@ -263,7 +269,8 @@ const SpliceAudio = () => {
 
     try {
       const response = await api.get(
-        `http://localhost:8000/download/${jobId}`,
+        // `http://localhost:8000/download/${jobId}`,
+        `${apiUrl}/download/${jobId}`,
         {
           //new
           responseType: "blob",

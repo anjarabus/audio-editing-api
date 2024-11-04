@@ -18,6 +18,8 @@ logging.basicConfig(level=logging.INFO)
 
 origins = [
     "http://localhost:3000",
+    "http://pamtalksaudiosplicing.com",
+    "https://pamtalksaudiosplicing.com",
 ]
 
 app.add_middleware(
