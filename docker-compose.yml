@@ -12,7 +12,11 @@ services:
       - ./FastAPI/:/home/FastAPI/
       - ./requirements.txt:/home/requirements.txt
     entrypoint:
-      ["bash", "-c", "cd /home/FastAPI && uvicorn main:app --workers 2"]
+      [
+        "bash",
+        "-c",
+        "cd /home/FastAPI && uvicorn main:app --host 0.0.0.0 --port 8000",
+      ]
     extra_hosts:
       - "host.docker.internal:host-gateway"
   nginx:
