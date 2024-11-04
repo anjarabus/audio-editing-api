@@ -12,7 +12,7 @@ import logging
 from pydub import AudioSegment 
 
 
-app = FastAPI()
+app = FastAPI(redirect_slashes=False)
 
 logging.basicConfig(level=logging.INFO)
 
