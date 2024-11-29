@@ -46,40 +46,93 @@ async def upload_csv(file: UploadFile = File(...)):
     
     reader = csv.reader(csvfile)
 
-    for row in reader:
-        for cell in row:
-            ts = re.findall(r"\d\d:\d\d:\d\d,\d\d\d\s-->\s\d\d:\d\d:\d\d,\d\d\d", cell)
-            if ts:
+    for row in reader: 
+        for cell in row: 
+            ts = re.findall(r"\d\d[,:.]\d\d[,:.]\d\d[,:.]\d\d\d", cell)
+            if ts:  
                 tss.append(ts)
 
-    #logging.info(f"Extracted timestamps: {tss}")  
+    # logging.info(f"Extracted timestamps: {tss}")
+ 
+    ts_start=[]
+    ts_end=[]
+    for ts in tss: 
+        ts_start.append(ts[0])
+        ts_end.append(ts[1])
+    # logging.info(f"Extracted start timestamps: {ts_start}")  
+    # logging.info(f"Extracted end timestamps: {ts_end}")  
 
     start_times=[]
     end_times=[]
 
-    for ts in tss:
-        hrs=ts[0][0:2]
-        mins=ts[0][3:5]
-        secs=ts[0][6:8]
-        ms=ts[0][9:12]
-        try: time = (int(hrs)*3600+int(mins)*60+int(secs))*1000+ int(ms) #time in milliseconds
-        except: time='none'
-        start_times.append(time)
+    for ts in ts_start:
+        try: 
+            logging.info(f"Processing start timestamp: {ts}")
+            hrs=ts[0:2]
+            mins=ts[3:5]
+            secs=ts[6:8]
+            ms=ts[9:12]
+            
+            try: 
+                time = (int(hrs)*3600+int(mins)*60+int(secs))*1000+ int(ms) #time in milliseconds
+            except: time='none'
+            start_times.append(time)
+            logging.info(f"start time: {time} ms")
+        except Exception as e:
+            logging.error(f"Error processing start timestamp: {e}")
+            start_times.append('none')
 
-        #logging.info(f"hrs mins secs ms: {int(hrs)} {int(mins)} {int(secs)} {int(ms)}")
-        #logging.info(f"start time: {(int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms)}")
+        # logging.info(f"hrs mins secs ms: {int(hrs)} {int(mins)} {int(secs)} {int(ms)}")
+        # logging.info(f"start time: {(int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms)}")
 
-        hrs = ts[0][17:19]
-        mins = ts[0][20:22]
-        secs = ts[0][23:25]
-        ms=ts[0][26:29]
-        try: time = (int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms) #time in milliseconds
-        except: time='none'
-        end_times.append(time)
+    for ts in ts_end: 
+        try: 
+            logging.info(f"Processing end timestamp: {ts}")
+            hrs = ts[0:2]
+            mins = ts[3:5]
+            secs = ts[6:8]
+            ms=ts[9:12]
+            
+            try: 
+                time = (int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms) #time in milliseconds
+            except: time='none'
+            end_times.append(time)
+            logging.info(f"end time: {time} ms")
+        except Exception as e:
+            logging.error(f"Error processing end timestamp: {e}")
+            start_times.append('none')
 
-        #logging.info(f"hrs mins secs ms: {int(hrs)} {int(mins)} {int(secs)} {int(ms)}")
-        #logging.info(f"end time: {(int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms)}")
+        # logging.info(f"hrs mins secs ms: {int(hrs)} {int(mins)} {int(secs)} {int(ms)}")
+        # logging.info(f"end time: {(int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms)}")
     
+
+ # from before, specific timestamp format
+    # for row in reader:
+    #     for cell in row:
+    #         ts = re.findall(r"\d\d:\d\d:\d\d,\d\d\d\s-->\s\d\d:\d\d:\d\d,\d\d\d", cell)
+    #         if ts:
+    #             tss.append(ts)
+
+    # start_times=[]
+    # end_times=[]
+
+    # for ts in tss:
+    #     hrs=ts[0][0:2]
+    #     mins=ts[0][3:5]
+    #     secs=ts[0][6:8]
+    #     ms=ts[0][9:12]
+    #     try: time = (int(hrs)*3600+int(mins)*60+int(secs))*1000+ int(ms) #time in milliseconds
+    #     except: time='none'
+    #     start_times.append(time)
+
+    #     hrs = ts[0][17:19]
+    #     mins = ts[0][20:22]
+    #     secs = ts[0][23:25]
+    #     ms=ts[0][26:29]
+    #     try: time = (int(hrs)*3600+int(mins)*60+int(secs))*1000 +int(ms) #time in milliseconds
+    #     except: time='none'
+    #     end_times.append(time)
+
     return {"extracted_timestamps": tss, "start_times": start_times, "end_times": end_times}
 
 # In-memory storage for file information

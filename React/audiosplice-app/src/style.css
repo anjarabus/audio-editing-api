@@ -2,8 +2,53 @@
 body {
   background-color: black;
   color: white;
-  margin: 0;
-  padding: 0;
+}
+
+.header-img {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  background-image: url("./images/PAM_Talks_Logo_Square_.png");
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center top;
+  z-index: -1;
+}
+
+.header {
+  position: absolute;
+  width: 100vw;
+  top: 30px;
+  z-index: 1;
+  color: white;
+  font-size: 30px;
+  text-align: center;
+  min-width: 400px;
+}
+
+.big-text {
+  font-size: 120px;
+  font-weight: bold;
+}
+
+.small-text {
+  font-size: 10px + 1vw;
+}
+
+.small-text-special {
+  font-size: 10px + 1vw;
+}
+
+.fancy-text {
+  font-family: "Dancing Script", cursive;
+  font-size: 5px + 2vw;
+}
+
+@media (max-width: 1000px) {
+  .small-text {
+    display: none;
+  }
 }
 
 .root {
@@ -11,10 +56,12 @@ body {
   flex: 1;
   flex-direction: column;
   align-items: center;
-  padding: 25px;
+  padding: 50px;
 }
 
 .inputs-row {
+  position: relative;
+  top: 10px;
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -46,55 +93,12 @@ body {
   align-items: center;
 }
 
-.background-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 250px;
-  background-image: url("./images/PAM_Talks_Logo_Square_.png");
-  background-size: auto;
-  background-repeat: no-repeat;
-  background-position: center top;
-  z-index: -1;
-}
-
-.header {
-  position: relative;
-  z-index: 1;
-  color: white;
-  padding: 20px;
-}
-
-.big-text {
-  font-size: 100px;
-  font-weight: bold;
-}
-
-.fancy-text {
-  font-family: "Dancing Script", cursive;
-}
-
-h1 {
-  margin-bottom: 30px;
-  color: white;
-  text-align: center;
-  font-size: 50px;
-}
-
-h3 {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-h4 {
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
 .text-content {
+  position: relative;
   display: inline;
+  min-width: 400px;
   text-align: left;
+  margin-top: 50px;
   margin-bottom: 50px;
 }
 
@@ -124,24 +128,36 @@ h4 {
   margin-right: 10px;
 }
 
+.file-list {
+  display: inline;
+}
+
 .general-button {
   padding: 6px 12px;
+  font-size: 18px;
   border-radius: 20px;
   background-color: black;
   color: white;
   border: 1px solid white;
   margin: 15px 15px;
+}
+
+.buffer-text {
+  font-size: 18px;
+  padding: 6px 12px;
+}
+
+.buffer-field {
+  padding: 6px 12px;
+  border-radius: 20px;
+  width: 100px;
+}
+
+.x-button {
+  margin: 15px 15px;
+  font-weight: bolder;
 }
 
 input[type="file"] {
   display: none;
-}
-
-.file-upload-button {
-  padding: 6px 12px;
-  border-radius: 20px;
-  background-color: black;
-  color: white;
-  border: 1px solid white;
-  margin: 15px 15px;
 }
