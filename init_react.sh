@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Activate the virtual environment
-source audioapi_env/bin/activate
+source webapi_env/bin/activate
 
 # Change directories
 cd React/audiosplice-app

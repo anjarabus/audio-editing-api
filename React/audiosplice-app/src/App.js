@@ -5,7 +5,9 @@ import AudioWaveform from "./AudioWaveform";
 import { FaPlay, FaPause } from "react-icons/fa";
 // import axios from "axios";
 
-const apiUrl = "https://api.pamtalksaudiosplicing.com";
+// const apiUrl = "https://api.pamtalksaudiosplicing.com"; // server address for prod mode
+
+const apiUrl = "http://localhost:8000"; // server address for dev mode
 
 const SpliceAudio = () => {
   const [csvFile, setCsvFile] = useState(null);
