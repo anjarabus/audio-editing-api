@@ -177,8 +177,21 @@ async def upload_audio(
     # modify next two lines: if the difference between end-time and the next start-time is more than the buffer, add buffer
     # check for negative numbers! If negative - ignore buffer 
 
-    start_times = [start_time - buffer for start_time in start_times]
-    end_times = [end_time + buffer for end_time in end_times]
+    # start_times = [start_time - buffer for start_time in start_times]
+    # end_times = [end_time + buffer for end_time in end_times]
+
+
+    try: 
+        for i in range(0, len(start_times) - 1): 
+            if abs(end_times[i]-start_times[i+1])>=buffer:
+                start_times[i+1] = start_times[i+1] - buffer
+                end_times[i] = end_times[i] + buffer
+
+    except: 
+        if len(start_times) != len(end_times):
+            raise HTTPException(status_code=400, detail="number of start and end times is not the same")
+        else: raise HTTPException(status_code=400, detail="couldn't add buffer for some reason, even though number of start and end times is the same")
+  
 
     if not isinstance(start_times, list) or not isinstance(end_times, list):
         raise HTTPException(status_code=400, detail="Timestamps must be lists")
