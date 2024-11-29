@@ -135,11 +135,22 @@ async def upload_csv(file: UploadFile = File(...)):
 
     return {"extracted_timestamps": tss, "start_times": start_times, "end_times": end_times}
 
+# @app.post("/buffer/{buffer}")
+# async def handle_buffer(buffer: int):
+#     try:
+#         # buffer = request.buffer
+#         return {"message": "Buffer received successfully", "buffer": buffer}
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
+
+
 # In-memory storage for file information
 file_info_storage = {}
 
-@app.post("/upload/audio")
+
+@app.post("/upload/audio/{buffer}")
 async def upload_audio(
+    buffer: int,
     files: List[UploadFile] = File(...),
     timestamps: str = Form(...),  # Accept timestamps as a JSON string
 ):
@@ -161,7 +172,10 @@ async def upload_audio(
         raise HTTPException(status_code=400, detail="Invalid timestamps format")
 
     start_times = timestamps.get('start_times')
-    end_times = timestamps.get('end_times')
+    end_times = timestamps.get('end_times') 
+
+    start_times = [start_time - buffer for start_time in start_times]
+    end_times = [end_time + buffer for end_time in end_times]
 
     if not isinstance(start_times, list) or not isinstance(end_times, list):
         raise HTTPException(status_code=400, detail="Timestamps must be lists")
@@ -225,9 +239,9 @@ async def upload_audio(
 
 
         #return {"detail": "Audio files processed and spliced successfully", "file_id": random_id,"file_name": name} 
-    return { "job_id": job_id} #new
+    return { "job_id": job_id} 
 
-# new
+
 @app.get("/playaudio/{job_id}")
 async def play_audio(job_id: str):
     print(f"Job storage contents: {job_storage}") # job storage is empty {} :(

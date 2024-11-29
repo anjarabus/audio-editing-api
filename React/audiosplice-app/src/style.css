@@ -129,7 +129,8 @@ body {
 }
 
 .file-list {
-  display: inline;
+  display: row;
+  padding-top: 50px;
 }
 
 .general-button {
@@ -155,6 +156,11 @@ body {
 
 .x-button {
   margin: 15px 15px;
+  padding: 0px 7px;
+  border-radius: 5px;
+  color: white;
+  background-color: black;
+  border: 1px solid white;
   font-weight: bolder;
 }
 

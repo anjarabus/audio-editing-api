@@ -87,10 +87,6 @@ const SpliceAudio = () => {
     console.log("handleAudioUpload function called");
     if (audioFiles.length === 0) return;
 
-    // console.log(
-    //   "Timestamps state before sending:",
-    //   timestamps.extracted_timestamps
-    // );
     const formData = new FormData();
     formData.append(
       "timestamps",
@@ -104,7 +100,7 @@ const SpliceAudio = () => {
     try {
       const result = await api.post(
         // "http://localhost:8000/upload/audio/",
-        `${apiUrl}/upload/audio`,
+        `${apiUrl}/upload/audio/${buffer}`,
         formData,
         {
           headers: {
@@ -125,16 +121,19 @@ const SpliceAudio = () => {
     }
   };
 
-  const handleBufferChange = async (buffer) => {
-    try {
-      const response = await api.post(`${apiUrl}/upload/audio/buffer`, {
-        buffer,
-      });
+  // const handleBufferChange = async () => {
+  //   try {
+  //     const response = await api.post(`${apiUrl}/buffer/${buffer}`);
 
-      setBuffer(response.data);
-    } catch (error) {
-      console.error("Error setting buffer:", error);
-    }
+  //     setBuffer(response.data.buffer);
+  //   } catch (error) {
+  //     console.error("Error setting buffer:", error);
+  //   }
+  // };
+
+  const handleBufferChange = (e) => {
+    const newBuffer = e.target.value; // Get the value from the input field
+    setBuffer(newBuffer); // Update the buffer state with the new value
   };
 
   const handleAudioFileChange = (event) => {
@@ -279,20 +278,6 @@ const SpliceAudio = () => {
     } else {
       console.log("index not valid");
     }
-    // const timestamp = timestamps.extracted_timestamps[index];
-    // console.log(timestamp[0]);
-
-    // if (typeof timestamp[0] == "string") {
-    //   const [startTime, endTime] = timestamp[0].split(" --> ");
-    //   const [time, milliseconds] = startTime.split(",");
-    //   const [hours, minutes, seconds] = time.split(":");
-    //   const clickedTime =
-    //     (hours * 3600 + minutes * 60 + seconds) / 1000 + milliseconds;
-    //   setUniversalTime(clickedTime);
-    //   console.log("clicked timestamp start time:", clickedTime);
-    // } else {
-    //   console.log("timestamp is not a string");
-    // }
   };
 
   ////////////////////// DOWNLOAD AUDIO /////////////////////////////
@@ -396,23 +381,15 @@ const SpliceAudio = () => {
                 <span className="buffer-text">Set Buffer : </span>
                 <input
                   type="number"
+                  value={buffer}
+                  // step="1"
+                  // min="0"
+                  // max="10000"
                   className="buffer-field"
                   onChange={handleBufferChange}
                 />
                 <span className="buffer-text">ms</span>
-                {/* {audioFileNames.length > 0 && (
-                  <div className="file-list">
-                    <h4>Files to Upload:</h4>
-                    <ul>
-                      {audioFileNames.map((fileName, index) => (
-                        <li key={index}>{fileName}</li>
-                      ))}
-                      <button onClick={() => handleRemoveFile(fileName)}>
-                        Remove
-                      </button>
-                    </ul>
-                  </div>
-                )} */}
+
                 {audioFileNames.length > 0 && (
                   <div className="file-list">
                     <h4>Files to Upload:</h4>
@@ -490,21 +467,6 @@ const SpliceAudio = () => {
                 isPlaying={isAllPlaying}
               />
             </div>
-
-            {/* <button
-              onClick={handlePlayAll}
-              disabled={isAllPlaying}
-              className="general-button"
-            >
-              Play All
-            </button>
-            <button
-              onClick={handlePauseAll}
-              disabled={!isAllPlaying}
-              className="general-button"
-            >
-              Pause All
-            </button> */}
           </div>
         </div>
 
