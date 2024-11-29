@@ -59,6 +59,10 @@ body {
   padding: 50px;
 }
 
+h1 {
+  padding-bottom: 20px;
+}
+
 .inputs-row {
   position: relative;
   top: 10px;
@@ -98,14 +102,15 @@ body {
   display: inline;
   min-width: 400px;
   text-align: left;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .timestamps-container {
   max-height: 500px;
   overflow-y: auto;
   border: 1px solid #ccc;
+  border-radius: 10px;
   padding: 50px;
   text-align: center;
   margin-left: 25px;
@@ -121,7 +126,11 @@ body {
 }
 
 .file-upload-container {
-  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-bottom: 5px;
+  padding-top: 20px;
 }
 
 .file-input {
@@ -136,7 +145,7 @@ body {
 .general-button {
   padding: 6px 12px;
   font-size: 18px;
-  border-radius: 20px;
+  border-radius: 15px;
   background-color: black;
   color: white;
   border: 1px solid white;
@@ -145,13 +154,30 @@ body {
 
 .buffer-text {
   font-size: 18px;
-  padding: 6px 12px;
+  padding-right: 10px;
+  padding-left: 100px;
+}
+
+.input-wrapper {
+  position: relative; /* To position the 'ms' text inside the input */
+  display: flex;
+  align-items: center;
 }
 
 .buffer-field {
-  padding: 6px 12px;
-  border-radius: 20px;
-  width: 100px;
+  border-radius: 10px;
+  width: 100px; /* Optional: control width of the input */
+  text-align: right;
+}
+
+.buffer-field:focus {
+  outline: none;
+  border: 1px solid black;
+}
+
+.buffer-ms {
+  font-size: 18px;
+  padding: 6px 10px;
 }
 
 .x-button {

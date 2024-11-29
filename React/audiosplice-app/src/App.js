@@ -342,7 +342,7 @@ const SpliceAudio = () => {
         <div className="inputs-row">
           <div className="inputs-column">
             <div className="text-content">
-              <h1>First... upload your story-board ;)</h1>
+              <h1>Upload a story-board </h1>
               <p>Upload a CSV file. You do not need to remove extra text.</p>
               <label className="general-button">
                 <input
@@ -358,10 +358,11 @@ const SpliceAudio = () => {
               </button>
             </div>
             <div>
-              <h1>Next... upload your audio files :)</h1>
+              <h1>Upload your audio files</h1>
               <p className="text-content">
-                Upload your audio files. <br></br> They will all be edited
-                according to the timestamps in your story-board. <br></br>
+                Upload your audio files. They will all be edited according to
+                the timestamps in your story-board. <br></br>You can also add a
+                buffer to the beginning and end of continuous clips.<br></br>
                 This may take a few minutes!
               </p>
               <div className="file-upload-container">
@@ -378,17 +379,17 @@ const SpliceAudio = () => {
                 <button onClick={handleAudioUpload} className="general-button">
                   {audioLoading ? "Editing..." : "Edit Files"}
                 </button>
-                <span className="buffer-text">Set Buffer : </span>
-                <input
-                  type="number"
-                  value={buffer}
-                  // step="1"
-                  // min="0"
-                  // max="10000"
-                  className="buffer-field"
-                  onChange={handleBufferChange}
-                />
-                <span className="buffer-text">ms</span>
+
+                <div className="input-wrapper">
+                  <span className="buffer-text">Set Buffer : </span>
+                  <input
+                    type="number"
+                    value={buffer}
+                    className="buffer-field"
+                    onChange={handleBufferChange}
+                  />
+                  <span className="buffer-ms">ms</span>
+                </div>
 
                 {audioFileNames.length > 0 && (
                   <div className="file-list">

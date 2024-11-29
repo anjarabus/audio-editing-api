@@ -174,6 +174,9 @@ async def upload_audio(
     start_times = timestamps.get('start_times')
     end_times = timestamps.get('end_times') 
 
+    # modify next two lines: if the difference between end-time and the next start-time is more than the buffer, add buffer
+    # check for negative numbers! If negative - ignore buffer 
+
     start_times = [start_time - buffer for start_time in start_times]
     end_times = [end_time + buffer for end_time in end_times]
 
